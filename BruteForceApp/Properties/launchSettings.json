@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BruteForceApp": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\gumbe\\source\\repos\\BruteForceApp\\BruteForceApp"
+    }
+  }
+}
