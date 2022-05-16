@@ -18,8 +18,8 @@ namespace BruteForceApp
             Console.WriteLine("\tWelcome to BRUTE FORCE");
             Console.WriteLine("\tThis program was crated by rozxckyyy\n");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\t1. Hacking without Brute Force (if the SortPasswords.txt file is already filled with passwords)");
-            Console.WriteLine("\t2. Hacking with Brute Force");
+            Console.WriteLine("\t1. Hacking (if the SortPasswords.txt file is not filled with passwords)");
+            Console.WriteLine("\t2. Hacking (if the SortPasswords.txt file is already filled with passwords)");
             Console.WriteLine("\t3. Exit the program\n");
             Console.Write("\tSelect an item: ");
             string item = Console.ReadLine();
@@ -37,59 +37,33 @@ namespace BruteForceApp
             Console.Write("\n\tEnter login: ");
             string login = Console.ReadLine();
             Console.WriteLine("\n\tThe search for password combinations has begun. Wait");
-
-            List<string> SortPass = new List<string>();
-
-            string pathAllPasswords = @"AllPasswords.txt";
             string pathSortPasswords = @"SortPasswords.txt";
-            var password = "Gfc857";
+            var password = "abcdefABCDEF123456";
             var q = password.Select(x => x.ToString());
             int size = 6;
-
-            for (int i = 0; i < size - 1; i++) //Permutation cycle
-            {
-                q = q.SelectMany(x => password, (x, y) => x + y);
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n\tThe search combination is over");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\n\tStarted writing password combinations to AllPasswords.txt");
-
-            using (StreamWriter writer = new StreamWriter(pathAllPasswords, false)) //Writing permutations in AllPasswords.txt
-            {
-                foreach (var item in q)
-                {
-                    writer.WriteLine(item);
-                }
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n\tEntry in AllPasswords.txt Completed");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\n\tAdding password combinations to the list");
-
-            using (StreamReader sr = new StreamReader(pathAllPasswords)) //Reading from AllPasswords.txt and adding to the SortPass list
-            {
-                string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    SortPass.Add(line);
-                }
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\n\tList is full");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\n\tSorting of passwords by pattern has begun");
+            int count = 0;
 
             using (StreamWriter writer = new StreamWriter(pathSortPasswords, false)) //Writing passwords in SortPasswords.txt
             {
-                foreach (var i in SortPass)
+                for (int i = 0; i < size - 1; i++) //Permutation cycle
                 {
-                    if (Regex.IsMatch(i.ToString(), @"([A-Z]{1}[a-z]{2}\d{3})"))
+                    q = q.SelectMany(x => password, (x, y) => x + y);
+
+                    if (i == size - 2) //Password sorting
                     {
-                        writer.WriteLine(i);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("\n\tThe search combination is over");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("\n\tSorting of passwords by pattern has begun");
+
+                        foreach (string l in q)
+                        {
+                            if (Regex.IsMatch(l, @"([A-Z]{1}[a-z]{2}\d{3})"))
+                            {
+                                writer.WriteLine(l);
+                                count++;
+                            }
+                        }
                     }
                 }
             }
@@ -97,6 +71,7 @@ namespace BruteForceApp
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\n\tPasswords sorted");
             Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"\n\tNumber of possible passwords: {count}");
             Console.WriteLine("\n\t1. Start hacking");
             Console.WriteLine("\t2. Close the program\n");
             Console.Write("\tSelect an item: ");
